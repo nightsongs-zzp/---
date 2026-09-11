@@ -1,0 +1,211 @@
+# -*- coding: utf-8 -*-
+"""修复 8 个提取出的 .py 文件中的 Word 表格拼接错乱(基于内容匹配, 可重复执行)。"""
+import os
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+DIR = os.path.join(HERE, '..', '代码附件')
+
+
+def load(name):
+    with open(os.path.join(DIR, name), encoding='utf-8') as f:
+        return f.read().split('\n')
+
+
+def save(name, lines):
+    text = '\n'.join(lines).rstrip() + '\n'
+    with open(os.path.join(DIR, name), 'w', encoding='utf-8') as f:
+        f.write(text)
+
+
+def fix_line(lines, predicate, new_indent, extra=''):
+    """把匹配行的缩进重置为 new_indent 个空格; new_indent=None 时保留原缩进仅加 extra"""
+    for i, l in enumerate(lines):
+        if predicate(l):
+            if new_indent is None:
+                lines[i] = l + extra
+            else:
+                lines[i] = ' ' * new_indent + l.strip()
+                if extra and not l.strip().endswith(extra):
+                    lines[i] += extra
+
+
+# ---------- 1. danfenyanshe.py ----------
+L = load('danfenyanshe.py')
+L = [l for l in L if l.strip() != 'return VGroup(line)']          # 删除遗留死代码
+fix_line(L, lambda l: l.strip().startswith('self.play(FadeIn(helpline_right_line'), 8)
+fix_line(L, lambda l: l.strip().startswith('#出射角度'), 18)
+fix_line(L, lambda l: l.strip().startswith('phase[') and 'animate.rotate' in l, 18)
+fix_line(L, lambda l: l.strip() == ')', 18)
+fix_line(L, lambda l: l.strip().startswith('self.play(FadeIn(right_angle)'), 8)
+for i, l in enumerate(L):
+    if l.strip().endswith("'''"):
+        L[i] = l.replace("'''", '')
+save('danfenyanshe.py', L)
+
+# ---------- 2. diffraction_interference.py ----------
+L = load('diffraction_interference.py')
+s = '\n'.join(L)
+s = s.replace('            "单缝衍射因子 × 多缝干涉因子\n→ 光栅总强",',
+              '            "单缝衍射因子 × 多缝干涉因子\\n→ 光栅总强",')
+L = s.split('\n')
+fix_line(L, lambda l: l.strip().startswith('ReplacementTransform(graph_area_group'), 8)
+fix_line(L, lambda l: l.strip().startswith('self.play(total_curve.animate'), 8)
+fix_line(L, lambda l: l.strip().startswith('#  聚焦半角宽度'), 8)
+save('diffraction_interference.py', L)
+
+# ---------- 3. generate_figures.py ----------
+L = load('generate_figures.py')
+fix_line(L, lambda l: l.rstrip().endswith('linewidth=2.2, zorder=4'), None, extra=')')
+save('generate_figures.py', L)
+
+# ---------- 4. generate_resolving_power.py ----------
+L = load('generate_resolving_power.py')
+for i, l in enumerate(L):
+    if l.startswith('图2/3: 顺序蓝渐变COLORS_DA'):
+        L[i] = '# 图2/3: 顺序蓝渐变\n' + 'COLORS_DA' + l.split('COLORS_DA', 1)[1]
+save('generate_resolving_power.py', L)
+
+# ---------- 5. guangshan.py ----------
+L = load('guangshan.py')
+fix_line(L, lambda l: l.strip().startswith('self.play(FadeIn(h_line_group,h_line_pin)'), 8)
+save('guangshan.py', L)
+
+# ---------- 6. shiliangtu.py ----------
+L = load('shiliangtu.py')
+fix_line(L, lambda l: l.strip().startswith('tol_arrow.target.put_start_and_end_on'), 8)
+fix_line(L, lambda l: l.strip().startswith('# 播放动画：所有箭头和 tol_arrow'), 8)
+save('shiliangtu.py', L)
+
+# ---------- 7. single_slit.py ----------
+L = load('single_slit.py')
+new_block = [
+    '        #  在x轴下方标注关键位置数字',
+    '        # 暗纹位置：x = ±1, ±2',
+    '        # 明纹位置：x ≈ ±1.43, ±2.46',
+    '        x_positions = {',
+    '            -2.46: "-2.46",',
+    '            -2.0:  "-2",',
+    '            -1.43: "-1.43",',
+    '            -1.0:  "-1",',
+    '            0:     "0",',
+    '            1.0:   "1",',
+    '            1.43:  "1.43",',
+    '            2.0:   "2",',
+    '            2.46:  "2.46",',
+    '        }',
+    '        x_ticks = VGroup()',
+    '        for x_val, text in x_positions.items():',
+    '            tick = Text(text, color=BLACK).scale(0.35)',
+    '            tick.next_to(axes.c2p(x_val, 0), DOWN, buff=0.2)',
+    '            x_ticks.add(tick)',
+    '        self.play(Write(x_ticks), run_time=2)',
+    '        #  标记明纹位置',
+]
+start = next(i for i, l in enumerate(L) if l.strip().startswith('#  在x轴下方标注关键位置数字'))
+end = next(i for i, l in enumerate(L) if l.strip().startswith('bright_fringes = ['))
+L = L[:start] + new_block + L[end:]
+save('single_slit.py', L)
+
+# ---------- 8. generate_fringe_patterns.py(整文件重建) ----------
+fresh = '''import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+from matplotlib.colors import LinearSegmentedColormap
+# 中文字体
+matplotlib.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'Noto Sans SC', 'DejaVu Sans']
+matplotlib.rcParams['axes.unicode_minus'] = False
+# 物理参数 —— 与 generate_figures.py 完全一致
+A = 3.0             # 缝宽 a（增大 → 包络更窄，结构更丰富）
+D = 12.0            # 光栅常数 d（d/a = 4，每第4级干涉峰缺级）
+N = 6               # 缝数
+WAVELENGTH = 1.0    # 波长 λ
+# 数据计算
+SIN_THETA = np.linspace(-1.0, 1.0, 4000)
+
+alpha = np.pi * A * SIN_THETA / WAVELENGTH
+beta  = np.pi * D * SIN_THETA / WAVELENGTH
+
+with np.errstate(divide='ignore', invalid='ignore'):
+    I_single = np.where(
+        np.abs(alpha) < 1e-12, 1.0,
+        (np.sin(alpha) / alpha) ** 2
+    )
+    I_multi = np.where(
+        np.abs(np.sin(beta)) < 1e-12,
+        np.where(np.abs(beta % np.pi) < 1e-12, float(N ** 2), 0.0),
+        (np.sin(N * beta) / np.sin(beta)) ** 2
+    )
+
+I_total = I_single * I_multi
+# 共享配置
+FIG_W, FIG_H = 12.8, 7.2  # 16:9
+COLOR_SINGLE = '#3b82b6'   # 蓝色 —— 单缝衍射
+COLOR_MULTI  = '#ef4444'   # 红色 —— 多缝干涉
+COLOR_TOTAL  = '#8b5cf6'   # 紫色 —— 光栅总效果
+
+N_VERTICAL = 600           # 条纹垂直方向的像素数
+Y_TOP = 3.0                # 纵向范围（任意单位，仅用于显示）
+def make_colormap(hex_color):
+    """创建从白色(强度=0)到目标颜色(强度=1)的 LinearSegmentedColormap"""
+    r, g, b = tuple(int(hex_color.lstrip('#')[i:i+2], 16) / 255.0 for i in (0, 2, 4))
+    cdict = {
+        'red':   [(0.0, 1.0, 1.0), (1.0, r, r)],
+        'green': [(0.0, 1.0, 1.0), (1.0, g, g)],
+        'blue':  [(0.0, 1.0, 1.0), (1.0, b, b)],
+    }
+    return LinearSegmentedColormap(f'white_to_{hex_color.lstrip("#")}', cdict)
+def make_fringe_2d(intensity_1d, gamma=1.0):
+    """将一维光强分布扩展为二维条纹图，gamma < 1 可提升暗纹可见度"""
+    i_norm = intensity_1d / np.max(intensity_1d)
+    i_gamma = i_norm ** gamma       # gamma 校正：压缩动态范围，次峰更可见
+    return np.tile(i_gamma, (N_VERTICAL, 1))
+def save_figure(fig, filename):
+    fig.savefig(filename, dpi=200, facecolor=fig.get_facecolor(),
+                edgecolor='none', bbox_inches='tight', pad_inches=0.3)
+    print(f"  -> 已保存: {filename}")
+def style_fringe_ax(ax):
+    """去除所有坐标轴，白底"""
+    ax.set_xlim(-1.0, 1.0)
+    ax.set_ylim(-Y_TOP, Y_TOP)
+    ax.set_facecolor('white')
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+# 图1: 单缝衍射条纹
+fig1, ax1 = plt.subplots(figsize=(FIG_W, FIG_H), facecolor='white')
+style_fringe_ax(ax1)
+
+fringe_single = make_fringe_2d(I_single, gamma=0.35)   # 大幅提升次级峰可见度
+cmap_single = make_colormap(COLOR_SINGLE)
+ax1.imshow(fringe_single, cmap=cmap_single, aspect='auto',
+           extent=[-1.0, 1.0, -Y_TOP, Y_TOP], origin='lower')
+
+save_figure(fig1, '01_single_slit_fringe.png')
+plt.close(fig1)
+# 图2: 多缝干涉条纹
+fig2, ax2 = plt.subplots(figsize=(FIG_W, FIG_H), facecolor='white')
+style_fringe_ax(ax2)
+
+fringe_multi = make_fringe_2d(I_multi)   # 各级主极大等亮，无需 gamma
+cmap_multi = make_colormap(COLOR_MULTI)
+ax2.imshow(fringe_multi, cmap=cmap_multi, aspect='auto',
+           extent=[-1.0, 1.0, -Y_TOP, Y_TOP], origin='lower')
+
+save_figure(fig2, '02_multi_slit_fringe.png')
+plt.close(fig2)
+# 图3: 光栅衍射总条纹
+fig3, ax3 = plt.subplots(figsize=(FIG_W, FIG_H), facecolor='white')
+style_fringe_ax(ax3)
+fringe_total = make_fringe_2d(I_total, gamma=0.45) # 让包络调制后的外层峰可见
+cmap_total = make_colormap(COLOR_TOTAL)
+ax3.imshow(fringe_total, cmap=cmap_total, aspect='auto',
+           extent=[-1.0, 1.0, -Y_TOP, Y_TOP], origin='lower')
+save_figure(fig3,'03_grating_total_fringe.png')
+plt.close(fig3)
+print("\\n三张条纹图全部生成完毕！")
+'''
+with open(os.path.join(DIR, 'generate_fringe_patterns.py'), 'w', encoding='utf-8') as f:
+    f.write(fresh)
+
+print('fixes applied')

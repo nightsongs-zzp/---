@@ -1,0 +1,76 @@
+表格总数: 26
+--- 表格#16: 1行 x 2列, 首个单元格样本: 'danfenyanshe.pydiffraction_interference.pyshiliangtu.pyguang'
+  r00c0 [ 1行] 首:'danfenyanshe.pydiffraction_interfere' 尾:'danfenyanshe.pydiffraction_interfere'
+  r00c1 [ 1行] 首:'(空)' 尾:'(空)'
+
+--- 表格#17: 5行 x 2列, 首个单元格样本: 'from manim import *import numpy as npdef MidpointArrow(\xa0 \xa0 s'
+  r00c0 [ 1行] 首:'from manim import *import numpy as n' 尾:'from manim import *import numpy as n'
+  r00c1 [ 1行] 首:'        return VGroup(line)    unit_' 尾:'        return VGroup(line)    unit_'
+  r01c0 [ 1行] 首:'    # 6. 将箭头放置到中点    tip.move_to(mid' 尾:'    # 6. 将箭头放置到中点    tip.move_to(mid'
+  r01c1 [ 1行] 首:'        inlight.move_to(ORIGIN + LEF' 尾:'        inlight.move_to(ORIGIN + LEF'
+  r02c0 [ 1行] 首:'        a_lable=MathTex(r"a", font_s' 尾:'        a_lable=MathTex(r"a", font_s'
+  r02c1 [ 1行] 首:'            phase_circle=Circle(radi' 尾:'            phase_circle=Circle(radi'
+  r03c0 [ 1行] 首:'        self.play(FadeIn(phase,outli' 尾:'        self.play(FadeIn(phase,outli'
+  r03c1 [ 1行] 首:'phase[7].animate.rotate(0.9,OUT,abou' 尾:'phase[7].animate.rotate(0.9,OUT,abou'
+  r04c0 [ 1行] 首:'        axes = Axes(            x_ra' 尾:'        axes = Axes(            x_ra'
+  r04c1 [ 1行] 首:'            curve = axes.plot_line_g' 尾:'            curve = axes.plot_line_g'
+
+--- 表格#18: 3行 x 2列, 首个单元格样本: 'from manim import *import numpy as npclass DiffractionAndInt'
+  r00c0 [ 1行] 首:'from manim import *import numpy as n' 尾:'from manim import *import numpy as n'
+  r00c1 [ 1行] 首:'        #  坐标轴（黑色）         title_tex' 尾:'        #  坐标轴（黑色）         title_tex'
+  r01c0 [ 1行] 首:'        self.wait(0.3)        # 2. 计' 尾:'        self.wait(0.3)        # 2. 计'
+  r01c1 [ 1行] 首:'        total_curve_correct = axes_n' 尾:'        total_curve_correct = axes_n'
+  r02c0 [ 1行] 首:'        arrow_y = 1.1        half_wi' 尾:'        arrow_y = 1.1        half_wi'
+  r02c1 [ 1行] 首:'(空)' 尾:'(空)'
+
+--- 表格#19: 5行 x 2列, 首个单元格样本: 'from manim import *import numpy as npdef move_to_arc_tangent'
+  r00c0 [ 1行] 首:'from manim import *import numpy as n' 尾:'from manim import *import numpy as n'
+  r00c1 [ 1行] 首:'        current_dir = mobject.get_ri' 尾:'        current_dir = mobject.get_ri'
+  r01c0 [ 1行] 首:'        axis = Axes(            x_ra' 尾:'        axis = Axes(            x_ra'
+  r01c1 [ 1行] 首:'            arrow.add(arr_each)     ' 尾:'            arrow.add(arr_each)     '
+  r02c0 [ 1行] 首:'                        slit = Line(' 尾:'                        slit = Line('
+  r02c1 [ 1行] 首:' # 获取两条线的方向向量            dir1 = R[i]' 尾:' # 获取两条线的方向向量            dir1 = R[i]'
+  r03c0 [ 1行] 首:'        # 总箭头        last_end = arro' 尾:'        # 总箭头        last_end = arro'
+  r03c1 [ 1行] 首:'        # 将剩余箭头变换为直线首尾相接（竖直方向）      ' 尾:'        # 将剩余箭头变换为直线首尾相接（竖直方向）      '
+  r04c0 [ 1行] 首:'           # 播放动画：所有箭头和 tol_arrow 同时' 尾:'           # 播放动画：所有箭头和 tol_arrow 同时'
+  r04c1 [ 1行] 首:'(空)' 尾:'(空)'
+
+--- 表格#20: 8行 x 2列, 首个单元格样本: 'from manim import *import numpy as npdef MidpointArrow(\xa0 \xa0 s'
+  r00c0 [ 1行] 首:'from manim import *import numpy as n' 尾:'from manim import *import numpy as n'
+  r00c1 [ 1行] 首:'    tip = Polygon(        np.array([' 尾:'    tip = Polygon(        np.array(['
+  r01c0 [ 1行] 首:'        N=4#缝数        d = 1.5#缝栅间距  ' 尾:'        N=4#缝数        d = 1.5#缝栅间距  '
+  r01c1 [ 1行] 首:'        p_line=Line(            star' 尾:'        p_line=Line(            star'
+  r02c0 [ 1行] 首:'        d_label = MathTex(r"d",color' 尾:'        d_label = MathTex(r"d",color'
+  r02c1 [ 1行] 首:'                start=grating[i].get' 尾:'                start=grating[i].get'
+  r03c0 [ 1行] 首:'        h_line_pin=DashedLine(      ' 尾:'        h_line_pin=DashedLine(      '
+  r03c1 [ 1行] 首:'        out_rays = VGroup()        f' 尾:'        out_rays = VGroup()        f'
+  r04c0 [ 1行] 首:'def play_wavefront(    scene,    sou' 尾:'def play_wavefront(    scene,    sou'
+  r04c1 [ 1行] 首:'        if radius <= 0 or radius > m' 尾:'        if radius <= 0 or radius > m'
+  r05c0 [ 1行] 首:'    # 方向指示    if show_direction:    ' 尾:'    # 方向指示    if show_direction:    '
+  r05c1 [ 1行] 首:'        run_time=total_time,        ' 尾:'        run_time=total_time,        '
+
+--- 表格#21: 2行 x 2列, 首个单元格样本: 'from manim import *import numpy as npclass SingleSlitDiffrac'
+  r00c0 [ 1行] 首:'from manim import *import numpy as n' 尾:'from manim import *import numpy as n'
+  r00c1 [ 1行] 首:'        # x轴标签：λ/a        x_label = ' 尾:'        # x轴标签：λ/a        x_label = '
+  r01c0 [ 1行] 首:'        #  在x轴下方标注关键位置数字         # 暗' 尾:'        #  在x轴下方标注关键位置数字         # 暗'
+  r01c1 [ 1行] 首:'            (2.4590,   0.0165,    "0' 尾:'            (2.4590,   0.0165,    "0'
+
+--- 表格#23: 2行 x 2列, 首个单元格样本: 'import numpy as npimport matplotlib.pyplot as pltimport matp'
+  r00c0 [ 1行] 首:'import numpy as npimport matplotlib.' 尾:'import numpy as npimport matplotlib.'
+  r00c1 [ 1行] 首:"with np.errstate(divide='ignore', in" 尾:"with np.errstate(divide='ignore', in"
+  r01c0 [ 1行] 首:'    ax.set_xlim(-1.0, 1.0)    ax.set' 尾:'    ax.set_xlim(-1.0, 1.0)    ax.set'
+  r01c1 [ 1行] 首:'ax1.plot(SIN_THETA,I_single,color=CO' 尾:'ax1.plot(SIN_THETA,I_single,color=CO'
+
+--- 表格#24: 2行 x 2列, 首个单元格样本: 'import numpy as npimport matplotlib.pyplot as pltimport matp'
+  r00c0 [ 1行] 首:'import numpy as npimport matplotlib.' 尾:'import numpy as npimport matplotlib.'
+  r00c1 [ 1行] 首:'D = 12.0            # 光栅常数 d（d/a = 4' 尾:'D = 12.0            # 光栅常数 d（d/a = 4'
+  r01c0 [ 1行] 首:'fringe_single = make_fringe_2d(I_sin' 尾:'fringe_single = make_fringe_2d(I_sin'
+  r01c1 [ 1行] 首:'cmap_total = make_colormap(COLOR_TOT' 尾:'cmap_total = make_colormap(COLOR_TOT'
+
+--- 表格#25: 3行 x 2列, 首个单元格样本: 'import numpy as npimport matplotlib.pyplot as pltimport matp'
+  r00c0 [ 1行] 首:'import numpy as npimport matplotlib.' 尾:'import numpy as npimport matplotlib.'
+  r00c1 [ 1行] 首:"图2/3: 顺序蓝渐变COLORS_DA = ['#6da7ec', '" 尾:"图2/3: 顺序蓝渐变COLORS_DA = ['#6da7ec', '"
+  r01c0 [ 1行] 首:'def add_legend(ax, loc):    ax.legen' 尾:'def add_legend(ax, loc):    ax.legen'
+  r01c1 [ 1行] 首:"FIG_H), facecolor='white')N_MAX2 = 5" 尾:"FIG_H), facecolor='white')N_MAX2 = 5"
+  r02c0 [ 1行] 首:"style_ax(ax3, '缝数 N', '可分辨的最小波长差 Δλ " 尾:"style_ax(ax3, '缝数 N', '可分辨的最小波长差 Δλ "
+  r02c1 [ 1行] 首:"save_figure(fig3, '可分辨的最小波长差随缝数的变化.p" 尾:"save_figure(fig3, '可分辨的最小波长差随缝数的变化.p"
