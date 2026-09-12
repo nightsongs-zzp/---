@@ -1,0 +1,66 @@
+{
+  // ============================================================
+  //  项目级 LaTeX 配置 —— 仅对本仓库生效，覆盖全局用户设置
+  //
+  //  策略：所有编译产物（中间文件 + 成品 PDF）统一收进 out/，
+  //        项目根目录只保留 .tex 源码与 figures/、代码附件/ 等素材。
+  // ============================================================
+
+  // ---- 产物输出目录 ----
+  // .aux/.toc/.out/.log/.synctex.gz 以及成品 PDF 全部写到 out/
+  "latex-workshop.latex.outDir": "%DIR%/out",
+
+  // ---- 编译 recipe ----
+  // latexmk 会自动处理多趟编译与交叉引用，无需手动跑两遍
+  "latex-workshop.latex.recipe.default": "latexmk: xelatex（推荐）",
+  "latex-workshop.latex.build.forceRecipeUsage": true,
+
+  // ---- 保存/改动后自动编译 ----
+  "latex-workshop.latex.autoBuild.run": "onFileChange",
+
+  // ---- 关闭「编译后自动清理中间文件」 ----
+  // 产物已经隔离在 out/ 里，无需删除；
+  // 而且必须保留 .synctex.gz，否则 PDF ↔ 源码的双向跳转会失效。
+  "latex-workshop.latex.autoClean.run": "none",
+
+  // ---- 手动执行 "Clean auxiliary files" 时的清理范围 ----
+  // 注意：数组是整体覆盖而非与全局合并，故此处列全。
+  // 补上了全局配置遗漏的 *.synctex.gz —— 正是它以前漏网到项目根目录的。
+  "latex-workshop.latex.clean.method": "glob",
+  "latex-workshop.latex.clean.subfolder.enabled": true,
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.log",
+    "*.toc",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.fls",
+    "*.fdb_latexmk",
+    "*.synctex",
+    "*.synctex.gz",
+    "*.synctex(busy)",
+    "*.synctex.gz(busy)",
+    "*.bbl",
+    "*.bcf",
+    "*.blg",
+    "*.run.xml",
+    "*.idx",
+    "*.ind",
+    "*.ilg",
+    "*.ist",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.snm",
+    "*.nav",
+    "*.vrb",
+    "*.xdv",
+    "*.auxlock",
+    "_minted-*/**",
+    "_minted-*/"
+  ]
+}
