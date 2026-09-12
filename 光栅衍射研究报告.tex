@@ -101,6 +101,9 @@
 % Latin Modern Roman 无希腊字形
 \xeCJKDeclareCharClass{CJK}{"03B1 -> "03C9, "03D1, "03D5, "03D6, "03F0, "03F1}
 
+% ---- 参考资料标题 ----
+% 正文改用 \cite 后, 参考资料列表由 thebibliography 自动生成标题
+\renewcommand{\bibname}{参考资料}
 
 \begin{document}
 
@@ -332,15 +335,31 @@ R=\frac{\lambda}{\delta\lambda}=kN
 
 \subsection{仿真流程与方案}
 
-第一步，参数初始化与离散采样，对衍射角全域均匀取点，构建计算矩阵；
+光栅衍射总光强由单缝衍射因子与多缝干涉因子逐点相乘得到，两因子均为 $\sin(\cdot)/(\cdot)$ 型超越函数\cite{ref2}。主极大位置、缺级级次与亮纹半角宽度取决于两因子在全衍射角域内的相对取值，解析方法只能给出零级、主极大等若干特例结论。为此本节采用数值采样方案\cite{ref7}，依「理论建模—算法实现—必要修正—结果验证」的顺序推进。
 
-第二步，分别代入单缝衍射因子、多缝干涉因子公式，逐点计算光强数值；
+核心计算步骤如下：
 
-第三步，叠加得到光栅衍射总光强，归一化处理消除亮度极值偏差；
+\begin{enumerate}[label=(\arabic*), leftmargin=2.4em, itemsep=2pt]
+\item \textbf{离散采样}：以 $\sin\theta$ 为采样变量，在 $[-1,\,1]$ 全域均匀取 4000 点，兼顾主极大锐度与计算量；
+\item \textbf{逐点求解}：代入相位参数 $\alpha=\pi a\sin\theta/\lambda$、$\beta=\pi d\sin\theta/\lambda$，逐点计算两因子并相乘；
+\item \textbf{峰值归一化}：按各工况自身峰值归一，消除缝数 $N$ 引入的 $N^{2}$ 亮度差异，使不同参数下的曲线可直接比较。
+\end{enumerate}
 
-第四步，固定部分参数、单一变量扫描，生成动态帧序列；
+上述公式在 $\alpha\to 0$ 与 $\sin\beta\to 0$ 处为 $0/0$ 型不定式，数值计算将返回无效值，需按极限关系予以修正\cite{ref4}：
 
-第五步，导出光强曲线、二维衍射图样、动态变化动画，用于视频素材制作。
+\begin{equation*}
+\lim_{\alpha\to 0}\left(\frac{\sin\alpha}{\alpha}\right)^{2}=1,
+\qquad
+\left(\frac{\sin N\beta}{\sin\beta}\right)^{2}=
+\begin{cases}
+N^{2}, & \beta=k\pi\\[2pt]
+0, & \text{其他}
+\end{cases}
+\end{equation*}
+
+第二处修正在于条纹图的灰度映射。单缝衍射次级极大不足主极大的 5\%，若按线性强度直接成像，包络调制后的高阶主极大几乎不可见；而多缝干涉各级主极大等亮，无需补偿。故仅对归一化强度施加 $\gamma$ 校正（单缝取 $\gamma=0.35$，总光强取 $\gamma=0.45$），压缩动态范围后次级结构方清晰可辨。
+
+最后由结果验证闭环。色分辨本领以 $R=kN$ 为基准，并计入缺级的影响：当 $d/a$ 为整数时 $k=(d/a)k'$ 各级整级缺失，中央衍射极大内的最高可用级次降为 $k_{\max}=d/a-1$。据此计算可分辨的最小波长差 $\Delta\lambda=\lambda/R$，并与钠双线（589.0 nm 与 589.6 nm，$\lambda/\Delta\lambda\approx 982$）的分辨要求对照，验证了仿真结果的物理合理性。
 
 \subsection{仿真输出成果}
 
@@ -730,17 +749,16 @@ HTML & 交互式仿真网页开发 \\
 
 本次项目实践也积累了光学可视化、科学动画制作、科普内容设计的完整经验，后续可进一步拓展衍射光学、光谱技术等相关科普内容，完善光学科普体系，持续优化交互体验，让基础科学知识以更通俗、更直观、更有趣的形式走进大众与课堂。
 
-\chapter{参考资料}
-
-\begin{enumerate}[label={[\arabic*]}, leftmargin=3em, itemsep=4pt]
-\item 赵凯华, 钟锡华. 光学[M]. 北京大学出版社, 2004.
-\item 梁铨廷. 物理光学[M]. 电子工业出版社, 2012.
-\item 张三慧. 大学物理学：波动与光学分册[M]. 清华大学出版社, 2019.
-\item 郁道银, 谈恒英. 工程光学[M]. 机械工业出版社, 2016.
-\item 中国科学院国家天文台. 郭守敬望远镜（LAMOST）科学成果简介[EB/OL].
-\item 周炳琨. 激光原理[M]. 国防工业出版社, 2014.
-\item 约瑟夫·W·古德曼. 傅里叶光学导论[M]. 电子工业出版社, 2020.
-\end{enumerate}
+\begin{thebibliography}{9}
+\addcontentsline{toc}{chapter}{\bibname}
+\bibitem{ref1} 赵凯华, 钟锡华. 光学[M]. 北京大学出版社, 2004.
+\bibitem{ref2} 梁铨廷. 物理光学[M]. 电子工业出版社, 2012.
+\bibitem{ref3} 张三慧. 大学物理学：波动与光学分册[M]. 清华大学出版社, 2019.
+\bibitem{ref4} 郁道银, 谈恒英. 工程光学[M]. 机械工业出版社, 2016.
+\bibitem{ref5} 中国科学院国家天文台. 郭守敬望远镜（LAMOST）科学成果简介[EB/OL].
+\bibitem{ref6} 周炳琨. 激光原理[M]. 国防工业出版社, 2014.
+\bibitem{ref7} 约瑟夫·W·古德曼. 傅里叶光学导论[M]. 电子工业出版社, 2020.
+\end{thebibliography}
 
 \chapter*{附件1：组员分工}
 \addcontentsline{toc}{chapter}{附件1：组员分工}
